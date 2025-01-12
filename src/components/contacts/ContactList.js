@@ -6,14 +6,53 @@ export default function ContactList() {
 
   const [contacts, setContacts] = useState([]);
 
+
   useEffect(() => {
     setContacts(contactsDB.slice(0, 5));
     }, []);
 
+    const handleRandomContact = () => {
+      setContacts((prev) => {
+        // Filter out already selected contacts
+        const remainingContacts = contactsDB.filter(
+          (contact) => !prev.some((c) => c.id === contact.id)
+        );
+  
+        if (remainingContacts.length === 0) {
+          alert('No more contacts to add!');
+          return prev; // Return current state if no contacts are left
+        }
+  
+        // Select a random contact from the remaining contacts
+        const randomIndex = Math.floor(Math.random() * remainingContacts.length);
+        const randomContact = remainingContacts[randomIndex];
+  
+        // Return a new array with the random contact added
+        return [...prev, randomContact];
+      });
+    };
+
+    const handleSortPopularity = () => {
+      setContacts((prev) => {
+
+      });
+    };
+
+    const handleSortAlphabetically = () => {
+      setContacts((prev) => {
+        const sortedByName = [...prev];
+          return sortedByName.sort((a, b) => a.name.localeCompare(b.name))
+      });
+    };
 
   return (
     <div>
-      <button className='border rounded-lg my-4 py-2 px-6'>Add Random Contact</button>
+      <div>
+        <button className='border rounded-lg my-4 py-2 px-6' onClick={handleRandomContact}>Add Random Contact</button>
+        <button className='border rounded-lg my-4 py-2 px-6' onClick={handleSortPopularity}>Sort by popularity</button>
+        <button className='border rounded-lg my-4 py-2 px-6' onClick={handleSortAlphabetically}>Sort by name</button>
+      </div>
+      
       <table className='mx-auto'>
         <thead className='text-2xl'>
           <tr className=''>
